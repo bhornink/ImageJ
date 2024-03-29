@@ -1,0 +1,76 @@
+// Written by: Bruna Hornink
+// date: 03.17.2024
+// objective: to process x ray images
+
+
+// Requires:
+//   -  "Normalize" plug-in
+//   - "dark.tif" image opened
+//   - "bright.tif" image opened
+
+
+dir = getDirectory("Choose a Directory");
+
+// Get the list of files in the directory
+list = getFileList(dir);
+
+// Process each image in the directory
+for (i = 0; i < list.length; i++) {
+    // Open the image
+    open(dir + list[i]);
+    
+    // Process the image
+    run("Remove Outliers...", "radius=2 threshold=2 which=Dark");
+    
+    // Save the processed image with a new name
+    saveAs("Tiff", dir + "wn_" + list[i]);
+    
+    // Close the current image
+    close();
+}
+
+// Open the images (skip if already opened)
+if (!isOpen("wn_BRIGHT_30kv_5x3s.tif")) {
+    open(dir + "wn_BRIGHT_30kv_5x3s.tif");
+}
+if (!isOpen("wn_DARK_5x3s.tif")) {
+    open(dir + "wn_DARK_5x3s.tif");
+}
+
+// Get the list of files in the directory
+list = getFileList(dir);
+
+// Corrected the loop to iterate over each file in the list
+for (i = 0; i < list.length; i++) {
+
+    // Store the current file name in a variable for easier access
+    currentImage = list[i];
+
+    // Check if the current file starts with "processed_", skip if it doesn't
+    if (!startsWith(currentImage, "wn_")) {
+        continue;
+    }
+
+    // Check if the current file is already opened, skip if it is
+    if (isOpen(currentImage)) {
+        continue;
+    }
+
+    // Open the image
+    open(dir + currentImage);
+
+    // Process the image
+    run("Normalize ", "scale=10000 bright=wn_BRIGHT_30kv_5x3s.tif dark=wn_DARK_5x3s.tif");
+    run("Brightness/Contrast...");
+    run("Enhance Contrast", "saturated=0.35");
+    run("Apply LUT");
+    run("Invert");
+    run("Smooth");
+    
+    // Save the processed image with a new name
+    // Corrected the filename to include "processed_" before the current image name
+    saveAs("Tiff", dir + "processed_" + currentImage);
+
+    // Close the current image
+    close();
+}
