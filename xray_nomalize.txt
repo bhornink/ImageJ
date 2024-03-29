@@ -1,13 +1,11 @@
-// Written by: Bruna Hornink
+// Written by: Bruna Hornink and Philipe Godoy
 // date: 03.17.2024
-// objective: to process x ray images
-
+// objective: to process X-ray images
 
 // Requires:
-//   -  "Normalize" plug-in
+//   - "Normalize" plug-in
 //   - "dark.tif" image opened
 //   - "bright.tif" image opened
-
 
 dir = getDirectory("Choose a Directory");
 
