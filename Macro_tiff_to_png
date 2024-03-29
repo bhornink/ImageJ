@@ -1,13 +1,22 @@
+// Written by: Bruna Hornink
+// date: 02.2024
+// objective: to convert tiff to png
+
+// Requires:
+//   - Tiff image
+//   - One repository input
+//   - One repository output
+
 // Set the directory containing TIF images
-input_dir = getDirectory("C:\Documentos\PhD\Projeto\Abordagem 1.b\mensuração densidade\raios-x\CO_tiff");
-output_dir = getDirectory("C:\Documentos\PhD\Projeto\Abordagem 1.b\mensuração densidade\raios-x\CO_png");
+input_dir = getDirectory("get directory input");
+output_dir = getDirectory("get directory output");
 
 // Get a list of all TIF files in the directory
 list = getFileList(input_dir);
 
 // Loop through each file in the list
 for (i = 0; i < list.length; i++) {
-    // Check if the file is a TIF file
+    // Check if the file is a TIF file and change the if according to the specific name of your file
     if (endsWith(list[i], "proc.tif") || endsWith(list[i], "proc.tiff")  || startsWith(list[i],"processed_")) {
         // Open the TIF file
         open(input_dir + list[i]);
